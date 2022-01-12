@@ -1,0 +1,19 @@
+name: ct-env
+channels:
+- cantera/label/dev  # cantera # for stable, /label/dev for dev
+- defaults
+- conda-forge
+dependencies:
+- python
+- cantera
+- ipython
+- jupyter
+- matplotlib
+- coolprop
+# - python-graphviz  # optional (needed for reaction path diagrams)
+# - h5py  # optional (needed for HDF/H5 output)
+- pandas  # optional (needed for pandas interface)
+- numpy
+- pywin32
+- black
+- tqdm

@@ -1,0 +1,517 @@
+The information in this document can also be accessed on the World Wide Web at
+
+                   http://www.gri.org
+point to the 'Basic Research' button, and then to 'GRI-Mech'
+
+At this Web location you can also view results of validation tests, directly 
+load the GRI_Mech files, and check on any late-breaking news available.
+
+
+Files in this directory:
+
+
+      README.DAT     This file
+
+   GRIMECH12.DAT     A reaction mechanism and rate coefficient file,
+                     in "Chemkin" format
+
+    THERMO12.DAT     A thermochemical data file to be used with GRIMECH12.DAT,
+                     as "NASA polynomial" coefficients
+ 
+
+
+     The files in this directory are products of computational and
+     experimental research sponsored by the Gas Research Institute.
+     It has been carried out at The University of California at Berkeley,
+     Stanford University, The University of Texas at Austin,
+     and SRI International.
+
+     GRI-Mech is an optimized (see below) detailed chemical reaction
+     mechanism capable of the best representation of natural gas flames
+     and ignition that we are able to provide as of the date at the head
+     of this file. Our ongoing program comprises the development of
+     extensions to include more chemistry, such as NOx and soot, more robust
+     parameterizations, and additional tools and documentation to make
+     working with GRI-Mech more effective.
+
+     In order to use the input files directly you need the Sandia National
+     Laboratory "Chemkin-II" programs. (See discussion below.) Ignition
+     profiles calculated with this mechanism and thermochemical data should
+     be independent of the program used to compute them; noticeable small 
+     differences in flame profiles should be expected if you are using a flame
+     code other than Chemkin, however, because the transport calculation, the 
+     numerical method of solving the partial differential equations, and so on,
+     differs from program to program.
+
+
+     Before telling you more we are obliged to say:
+
+         *******************   GRI DISCLAIMER   *********************
+
+          LEGAL NOTICE   These files, both the ones intended for use
+          as computer input as well as those comprising documentation,
+          were prepared by The University of California at Berkeley,
+          Stanford University, SRI International and The University of
+          Texas at Austin as a result of work sponsored by the Gas Research
+          Institute (GRI). Neither GRI, members of GRI, nor any person
+          acting on behalf of either:
+
+       a. Makes any warranty or representation, express or implied,
+          with respect to the accuracy, completeness, or usefulness
+          of the information contained in these files, or that the use
+          of any data, method, or process disclosed in these files
+          may not infringe privately owned rights; or
+
+       b. Assumes any liability with respect to the use of, or for
+          damages resulting from the use of, any information,
+          data, method or process disclosed in these files.
+
+         *************************************************************
+
+     Now that you have read our disclaimer, here is what you can
+     find in this README file:
+
+           1. Descriptions of the GRI-Mech current release files
+           2. Instructions for their use
+           3. A summary of what we can tell you about the
+              performance of the current release
+           4. A request for feedback on your experiences with
+              the current release
+           5. A prognosis of future releases and extensions
+           6. How to get in touch with us
+           7. Some cautionary notes.
+
+
+1. WHAT IS GRI-Mech?
+
+      What follows is a very brief overview of GRI-Mech. A more detailed
+      account, in the form of a hard-copy document, is forthcoming. Send one
+      of us an e-mail or regular mail request to get on the mailing list for
+      this document. We'll send it to you as soon as it is ready.
+
+      GRI-Mech is essentially a list of elementary chemical reactions and
+      associated rate constant expressions. Most of the reactions listed have
+      been studied one way or another in the laboratory, and so the rate
+      constant parameters mostly have more or less direct measurements behind
+      them. In order to get successive releases out in a timely manner we have
+      not yet prepared a comprehensive document explaining all of the sources
+      of information that were consulted and evaluated, the rate constant theory
+      that went into constructing the set, and the details of each step of the
+      optimization process. We will provide this documentation in the future.
+
+      Once we have a starting set of rate constant parameters, we undertake
+      extensive sensitivity tests on a variety of experimental data related to
+      natural gas ignition and flames. These tests tell us which of the rate
+      parameters should be considered closely to "tune" the set so as to get
+      an optimum representation of the data. We then go through a long process
+      of simultaneous parameter optimization, most of it done automatically---
+      i.e., by a computer adjusting the parameters---to get the parameter set
+      of the current release. This is carried out with very strict constraints
+      to keep the rate parameters being optimized within predetermined bounds
+      that we had set on the basis of evaluations of the uncertainties in
+      measurements of the rates of elementary reactions and by applications of
+      conventional gas reaction rate theory. Once the optimum parameter set is
+      found, it is checked against the literature in an extensive "validation
+      round", as described in Section 3 below.
+
+      While the mechanism file was specifically formatted for use with the
+      Chemkin modeling programs, it can be reformatted readily to serve
+      as input for any kind of program you may happen to have. In order to do
+      this you only need to know (1) that the rate constant parameters for the
+      bimolecular reactions and the limiting forms of the unimolecular
+      reactions are set up in the form k = A T^m exp(-E/RT), with concentration
+      units mol/cm^3; (2) that the "falloff parameters" for unimolecular
+      reactions are the values of a, T***, T** and T* in the formula
+
+          F_cent = (1-a)exp(-T/T***) + a exp(-T/T*) + exp(-T**/T)
+
+      which gives the temperature dependence of F_cent, the factor by which
+      the rate constant of a given unimolecular reaction at temperature T and
+      reduced pressure P_r = k_o[M]/k_infinity of 1.0 is less than the
+      value k_infinity/2 which it would have if unimolecular reactions would
+      behave according to the Lindemann formula
+       
+                                  k_infinity 
+                      k  =  __________________________ F
+                             1  +  k_infinity/k_0[M]
+
+
+      where the "broadening factor" F, which would be 1 for the idealized
+      case, is computed from
+
+                                        log(F_cent) 
+              log(F)  =   --------------------------------------------
+                          1 + [(log P_r + C)/(N - .14{log P_r + C})]^2
+
+
+      and  N = 0.75 - 1.27log(F_cent) and C = -0.4 - 0.67 log F_cent.
+      
+      [For more information about how these formulas work, consult
+      pages 22 and 23 of "Chemkin-II: A Fortran Chemical Kinetics Package for
+      the Analysis of Gas Phase Chemical Kinetics", Sandia Report SAND89-8009B
+      UC-706, Reprinted January 1993, by R.J. Kee, F.M. Rupley and J.A. Miller.
+      The person in charge of Chemkin is Fran Rupley, who can be reached via
+      her Internet address fran@sandia.gov. The theory underlying the use
+      of these formulas in combustion chemistry is described by W.C. Gardiner
+      and J. Troe in Chapter 4 of "Combustion Chemistry", Springer-Verlag,
+      New York, 1984.] The low-pressure limit rate constants, and the rate
+      constants of unimolecular reactions that are always near their low-
+      pressure limits for combustion conditions have been assigned "enhanced
+      efficiencies" in Chemkin format; if your program will not handle
+      different efficiencies for different species automatically, then you will
+      have to account for each of the colliders in separate reactions.
+
+      In addition to reviewing the literature rate constant data we also
+      examined the thermochemistry of all of the free radicals in the
+      mechanism. Some of the thermochemical parameters in GRI-Mech 
+      differ from those in the "Sandia data base". For this reason
+      we include a file with all of our thermochemistry in it, represented as
+      the coefficients of "NASA Polynomials". [To find out about NASA
+      polynomials you can consult the report by A. Burcat "Thermochemical
+      Data for Combustion Calculations", Chapter 8 of Combustion Chemistry,
+      W.C. Gardiner, Ed, Springer-Verlag, New York, 1984; or its more recent
+      incarnations, "1994 Ideal Gas Thermodynamic Data for Combustion and Air-
+      Pollution Use", Technion Report TAE 697, December 1993, by A. Burcat and
+      B. McBride, and "Coefficients for Calculating Thermodynamic and Transport
+      Properties of Individual Species", NASA Report TM-4513, by B.J. McBride,
+      S. Gordon and M.A. Reno, October 1993.  A. Burcat can be contacted by
+      Internet at aer0201@technio bitnet.] If you use the Sandia data base 
+      usually supplied with Chemkin you may get output that is significantly
+      different.
+
+      For the flame calculations in the optimization and validation process
+      we used the Sandia transport package and database. (R.J. Kee, J. Warnatz
+      and J.A. Miller, Sandia Report SAND83-8209) We have changed the symbol 
+      CH2* used for singlet methylene in the previous version, GRI-Mech 1.1,
+      to the ones labeled CH2(S), as in the original Sandia notation.
+
+
+2. HOW TO USE GRI-Mech
+
+      The easiest way to learn how to set up GRI-Mech for combustion modeling
+      is to just do it! If you have Chemkin up and running, and have tested it
+      using the sample files provided with the Chemkin distribution, all you
+      need to do is substitute the GRI-Mech input files for the Chemkin
+      samples.  Whatever worked for you to make the Chemkin sample
+      files run will also run the GRI-Mech files.
+
+
+3. PERFORMANCE THAT WE KNOW ABOUT
+
+      We have tested the performance of GRI-Mech extensively. In general
+      we found that GRI-Mech 1.2 performs similarly or slightly
+      better than its predecessor, GRI-Mech 1.1, at conditions intended:
+      shock-tube ignition and laminar premixed flames of methane.  For
+      some conditions removed from those, we found that GRI-Mech 1.2 has
+      some notable disagreement with experiment; for example: calculated
+      low-temperature high-pressure oxidation rates of methane are faster
+      than experiment by about 20-30 %; calculated low-temperature,
+      high-pressure oxidation rates of CO are faster than experiment;
+      ignition delay for CH2O are underpredicted by a factor 2; and
+      laminar flame speeds of ethane are overpredicted by 10 %.
+
+      Below is a summary of some of the validation checks that were made,
+      by us and others.
+
+ A. Ignition Delays
+
+      Asaba, T., Gardiner, W.C. Jr., and Stubbeman, R.F., 10th
+       Symposium (International) on Combustion, p. 295 (1965).
+          Ignition delays in H2-O2-Ar mixtures.
+      Burcat, A., Crossley, R.W., and Scheller, K. Combust. Flame 18,
+       115 (1972).
+          Ignition delays in 2% C2H6 - 7% O2 mixtures.
+      Cheng, R.K. and Oppenheim, A.K. CF 58,125-139 (1984).
+          Ignition delays in H2-O2-Ar mixtures.
+      Crossley, R.W., Dorko, E.A., Scheller, K., and Burcat, A.,
+       Combust. Flame 19, 373 (1972).
+          Ignition delays in CH4-C2H6 mixtures.
+      Dean, A. M., Johnson, R. L., and Steiner, D. C.,
+       Combust. Flame (37), 41, 1980.
+          CH2O-O2-Ar and CH2O-CO-O2-Ar ignition delays.
+      Frenklach, M. and Bornside, D.E., Combust. Flame 56, 1 (1984).
+          Ignition delays in a 9.5% CH4 - 19.0% O2 - Ar mixture.
+      Gardiner, W.C. Jr., McFarland, M., Morinaga, K., Takeyama, T.,
+       and Walker, B.F. J. Phys. Chem. 75,1504-1509 (1971).
+          Ignition delays in H2-O2-CO-Ar mixtures.
+      Hidaka, Y., Gardiner, W.C., and Eubank, C.S. J. of Mol. Sci.
+       (China) 2,141-153 (1982).
+          Ignition delays in C2H6-O2-Ar mixtures.
+      Lifshitz, A., Scheller, K., Burcat, A., and Skinner, G.B.,
+       Combust. Flame 16, 311 (1971).
+          Ignition delays in several CH4-O2-Ar mixtures.
+      Seery, D.J. and Bowman, C.T., Combust. Flame 14, 37 (1970).
+          Ignition delays in several CH4-O2-Ar mixtures.
+      Slack, M. and Grillo, A., Grumman Research Department Report RE-537,
+       Investigation of Hydrogen-Air Ignition Sensitized by Nitric 
+       Oxide and by Nitrogen Dioxide, 1977.
+          H2-Air ignition delays.
+      Snyder, A.D., Robertson, J., Zanders, D.L., and Skinner, G.B.,
+       Technical Report AFAPL-TR-65-93, Shock Tube Studies of Fuel-Air 
+       Ignition Characteristics, 1965.
+          H2-Air ignition delays.
+      Spadaccini, L.J. and Colket, M.B., III, Prog. Energy Combust. Sci.,
+       to be published.
+          Ignition delays in CH4-O2 and CH4-C2H6-O2 mixtures.
+      Takahashi, K., Inomata, T., Moriwaki, T., and Okazaki, S.
+       Bull. Chem. Soc. Jpn. 62,2138-2145 (1989).
+          Ignition delays in C2H6-O2-Ar mixtures.
+      Tsuboi, T. and Wagner, H.Gg., 15th Symposium (International) on
+       Combustion, p.883 (1974).
+          Ignition delays in 0.2% CH4 - 2% O2 shock waves.
+
+ B. Species Profiles in Shock-Tube Ignition Experiments
+
+      Chang, A.Y., Davidson, D.F., DiRosa, M., Hanson, R.K., and
+       Bowman, C.T., Shock Tube Experiments for Development and
+       Validation of Kinetic Models of Hydrocarbon Oxidation,
+       Work-in-Progress Poster 3-23, 25th Combustion Symposium.
+          CH3 and OH profiles in CH2-O2-Ar, C2H6-O2-Ar and
+                                             CH4-C2H6-O2-Ar mixtures
+      Tsuboi, T. and Wagner, H.Gg., 15th Symposium (International) on
+       Combustion, p.883 (1974).
+          CH3 profiles in 0.2% CH4, 2% O2 shock waves.
+      Yu, C.-L., Wang, C., and Frenklach, M., unpublished.
+          OH and CO profiles in a series of CH4-O2 mixtures.
+
+ C. Laminar Flame Speeds
+
+      Egolfopoulos, F.N., Zhu, D.L., and Law, C.K., Twenty-third Symposium
+       (International) on Combustion, p.471,1990.
+          Laminar flame speeds at 1 atm in C2H6-air mixtures.
+      Just, Th., personal communication.
+          Laminar flame speeds of methane at 1, 5, and 20 atm, phi=0.75-1.25,
+           at different cold-gas temperatures.
+      Laminar flame speeds of methane at phi=1 and a range of pressures from
+       0.25 to 20 atm.  The sources are:
+       Egolfopoulos F.N., Cho, P., and Law, C.K., Combust. Flame 76,
+        375 (1989).
+       Garforth, A.M. and Rallis, C.J., Combust. Flame  31, 53 (1978).
+       Babkin, V.S., Kozachenko, L.S., and Kuznetsov, I.L., Zh. Prikl.
+        Mekhan. Tekn. Fiz. 145 (1964);  Babkin, V.S. and Kozachenko, L.S., 
+        Combust. Explosion and Shock Waves  2(3), 46 (1966);
+        Babkin, V.S., V'yun, A.V. and Kozachenko, L.S., Combust. Explosion
+        and Shock Waves  2(2), 32 (1966).
+       Andrews, G.E. and Bradley, D., Combust. Flame  19, 275 (1972).
+       Lijima, T. and Takeno, T., Combust. Flame  65, 35 (1986).
+      Laminar flame speeds at 1 atm in H2-air mixtures. The sources are:
+       Dowdy, D.R., Smith, D.B., Taylor, S.C., and Williams, A., Twenty-third
+        Symposium (International) on Combustion, 325, 1990.
+       Edmondson, H. and Heap, M.P., Combust. Flame, 16, 161 (1971).
+       Egolfopoulos, F.N. and Law, C.K., Twenty-third Symposium (International) 
+        on Combustion, 333, 1990. (corrected in Vagelopouplos et al., 1994)
+       Gunther, R. and Janish, G., Combust. Flame, 19, 49 (1972).
+       Koroll, G.W., Kumar, R.K. and Bowles, E.M., Combust. Flame 94, 330 (1993)
+       Liu, D.S. and MacFarlane, Combust. Flame, 49, 59 (1983).
+       Scholte, T.G. and Vaags, D.B., Combust. Flame, 2, 495 (1959).
+      McLean, I.C., Smith, D.B., and Taylor, S.B., Combust. Flame, in 
+       press, 1994.
+          Laminar flame speeds at 1 atm in CO-H2, phi = 1.0 and 1.7.
+      Vagelopoulas C.M., Egolfopoulos F.N., and Law, C.K., Paper 25-303,
+       Presented at the 25th Symposium (International) on Combustion, 1994
+          Laminar flame speeds of methane at 1 atm, phi=0.4-1.7, with three
+           bath gases: Ar, N2, and CO2.
+
+D. Laminar Flame Species Profiles
+
+      Bernstein, J.S., Fein, A., Choi, J.B., Cool, T.A., Sousa, R.C., 
+       Howard, S.L., Locke, R.J., and Miziolek, A.W., Combust. Flame 82, 85 
+       (1993).
+          OH, CH, H, O, CO, CH3, and HCO profiles in a 20 torr CH4-O2-Ar
+           flame.
+      Fleming, J.W., Burton, K.A., and Ladouceur, H.D., Chem. Phys. 
+       Lett. 175, 395 (1990).
+          OH and CH profiles in a 10 torr CH4-O2 flame.
+      Heard, D.E., Jeffries, J.B., Smith, G.P., and Crosley, D.R., 
+       Combust. Flame 88, 137 (1922).
+          OH, CH, and H profiles in a 30 torr CH4-air flame.
+      Williams, B.A. and Fleming, J.W., Combust. Flame 98, 93 (1994). 
+          OH and CH profiles in a 10 torr CH4-O2-Ar flame.
+
+ E. Flow Reactor Experiments
+
+      Hunter, T.B, Ph.D. Thesis, Pennsylvania State University, 1994; 
+       Hunter, T.B., Wang, H., Litzinger, T.A., and Frenklach, M.
+       Combust. Flame 97:201 (1994).
+         The experimental data on methane combustion were obtained
+          in the Penn State High Pressure Optically Accessible Flow Reactor
+          facility.
+         The calculations were performed by Thomas B. Hunter, Sandia
+          National Laboratories, P.O.Box 969, MS 9052, Livermore,
+          CA 94550-0969.   E-mail: hunter@california.sandia.gov
+      Kim, T. J., Yetter, R. A. and Dryer, F. L., Paper 25-240, 25th
+        Combustion Symposium, 1994.
+          A flow reator study of moist CO oxidation at moderate temperatures
+          and pressures from 1-10 atmospheres.
+      Kristensen, P.G., Glarborg, P., and Dam-Johansen, unpublished data.
+         A 9-mm quartz flow reactor study of methane oxidation;
+          the initial conditions are: [CH4]=1473 ppm, [O2]=2996 ppm,
+          [H2O]=0.019, N2 carrier, P=1.07 atm,
+          residence time=127/T (T in K, constant mass flow).
+         The calculations were performed by Peter Glarborg, Department of
+          ChemicalEngineering, Technical University of Denmark, Bldg. 229,
+          DK-2800, Lyngby, Denmark.   E-mail: ketpg294@vm.uni-c.dk
+
+
+4. PLEASE TELL US WHAT YOU LEARN, AND ABOUT YOUR PROBLEMS
+
+      While the authors are continuing to expand their understanding
+      of how GRI-Mech works in their own labs, it is only natural that
+      others will see things that should be done with quite different
+      perspectives. We would very much like to hear from you.
+
+      It will make us feel good to hear about successful applications
+      of GRI-Mech, but it will help us more in our development work,
+      and consequently all users of our later releases, to hear about
+      failures. We welcome suggestions of any kind.
+
+      Please be as specific as you can in telling us about your results
+      and your problems. We will be happy to include the results of your
+      "validation runs", with appropriate citation to you, in our
+      printed materials.
+
+      We are especially interested in maintaining a list of users, so
+      that we can quickly communicate changes, problems, and updates.
+      Since our ftp daemon does not record actual usernames, we request
+      that those who are considering use of the mechanism send us their
+      e-mail addresses. Please mail to SMITH@MPLVAX.SRI.COM.
+
+
+5. CURRENT AND FUTURE EXTENSIONS OF GRI-Mech
+
+      The current release of GRI-Mech is 1.2. This version improves on
+      Release 1.1 in the following ways:
+      --the nominal rate coefficients for two reactions,
+            H + O2 --> OH + O   and   CH3 + H (+M) --> CH4 (+M),
+         were updated; 
+      --the optimization variable for reaction CH3 + H (+M) --> CH4 (+M)
+        was switched from an averall multiplier (used in GRI-Mech 1.1)
+        to a multiplier for the low-pressure limit rate coefficient only;
+      --the list of optimization targets was substantially expanded.
+
+      We plan to deliver Release 2.1, which will include the basic NOx
+      chemistry pertinent to natural gas flames, in the Spring of 1995.
+
+      In future releases of GRI-Mech the following extensions will be
+      made.
+
+           Addition of low-temperature methane oxidation chemistry
+           Addition of soot chemistry
+
+      In addition, we will be doing our best to improve the modeling
+      accuracy, the robustness of extrapolations to conditions where
+      measurements are difficult, and so on, and to explain, by repeating
+      experiments in our own laboratories, disagreements with the literature
+      that we have found or will find in the future. Thus, we will be doing
+      new optimizations and producing improved GRI-Mech releases periodically.
+
+
+6. HOW TO CONTACT THE AUTHORS
+
+      We can be reached at any of the addresses given below.
+      Bob Serauskas at GRI is the Program Manager of our project,
+      so if you have an official question, he is the person to
+      contact. His phone number is 312 399 8208, his mailing address
+      is c/o Gas Research Institute, 8600 West Bryn Mawr Avenue,
+      Chicago, Illinois 60631-3562, his Internet address is 
+      rserausk@gri.org and his fax number is 312 399 8170.
+      
+      For scientific questions please contact Greg Smith or one of the
+      other authors listed below:
+
+      University of California, Berkeley
+
+           Michael Frenklach   myf@euler.berkeley.edu
+           Mikhail Goldenberg  mgold@euler.berkeley.edu
+
+      Stanford University
+
+           Tom Bowman          bowman@navier.stanford.edu
+
+      SRI International
+
+           Greg Smith          smith@mplvax.sri.com
+           Dave Golden         golden@mplvax.sri.com
+
+      University of Texas at Austin
+
+           Bill Gardiner       bill@lioness.cm.utexas.edu
+           Vitaly Lissianski   vitaly@lioness.cm.utexas.edu
+
+      To cite GRI-Mech, for the time being please refer to our 1994
+      Combustion Symposium Poster, "An Optimized Kinetics Model for
+      for Natural Gas Combustion", by M. Frenklach, H. Wang, C.T. Bowman,
+      R.K. Hanson, G.P. Smith, D.M. Golden, W.C. Gardiner and V. Lissianski,
+      25th International Symposium on Combustion, Irvine, California,
+      Work-In-Progress Poster Session 3, Number 26.
+
+
+7. SOME CAUTIONARY NOTES
+
+      We want to warn you about several important aspects of GRI-Mech.
+
+   a. PLEASE DO NOT MAKE ANY SUBSTITUTIONS!
+      
+      Or if you MUST so, be very careful. GRI-Mech has been optimized
+      as a whole, and should be used just as you get it if you want to
+      duplicate its ability to model natural gas combustion on your machine.
+      You will not surpass the performance we obtained for natural gas
+      combustion by adjusting any "sensitive" reaction rate constant expressions.
+      Any
+      substitution of "better" rate constant expressions or removal
+      of species or reactions will put you at risk of getting significantly
+      deteriorated performance of the mechanism when tested against the whole
+      spectrum of natural gas combustion data.
+
+      We recognize that users will be adjusting rate constants anyhow,
+      or making major changes for specific purposes, like doing sensitivity
+      analyses of one kind or another. But, keep in mind that we
+      are not claiming that GRI-Mech is a starting point for further
+      mechanism building by patchwork means. You can use it that way
+      if you like, but we cannot predict what the consequences may be.
+
+   b. Numbers of species and reactions. The list of reactions and species in
+      GRI-Mech contains numerous entries that are "unimportant" for natural
+      gas combustion.
+
+      There are several reasons why we have them there anyway. One is that
+      there are special purposes (like models of flame radiation or ionization)
+      where elementary reactions that are otherwise negligible become very
+      important, and we want to have these reactions on hand for occasions
+      where somebody is checking these aspects. A second reason is that the
+      combustion of some other fuels (methanol, acetylene, ...) can be modeled
+      using GRI-Mech as a subset, with the knowledge that the part of the
+      mechanism relevant to natural gas has been optimized in the manner
+
+
+      described above. [We have NOT checked into the performance of the
+      mechanism for any fuels except methane, ethane, hydrogen and carbon
+      monoxide.] In future releases of GRI-Mech, we will offer some shorter
+      versions that are optimized for natural gas combustion alone.
+      There are techniques for shortening reaction and species lists that
+      you may want to use yourself on GRI-Mech---for example, the 
+      "detailed reduction" method described by H. Wang and M. Frenklach,
+      Combust. Flame 87, 365 (1991). We can help you on an individual 
+      basis to produce such reduced mechanisms. (Check periodically with
+      our GRI-Mech Mosaic Home Page---http://diesel.fsc.psu.edu/~gri_mech---
+      for new information on this.)
+
+   c. Back reactions. We consider all reactions to be reversible, even
+      though it is clear on thermochemical grounds that negligible reverse
+      flux will occur in many reactions. If your modeling program
+      requires explicit inclusion of reverse reactions, GRI-Mech, as presented
+      in this directory, will require additional calculations to find
+      out which of them are really needed. Some day we will
+      provide a "reversal tool" for automatic conversion of rate constant
+      expressions to their respective reverse reaction expressions.
+
+   d. Computer time. The numerous species and reactions in GRI-Mech which 
+      really do not need to be included for modeling natural gas combustion
+      increase the demand on computer resources for doing the chemical part
+      of the model by a large factor. We accept this in order to avoid coping
+      with the numerous problems that arise in streamlining such computations.
+
+      Computer time has not been a problem for us even when using GRI-Mech on
+      small workstations. If you are using an older PC, then you may encounter
+      longer integration times than you want to live with. We are thinking
+      about ways to deal with this.

@@ -5,7 +5,7 @@
 ! doi:10.1080/13647830902767302
 ! and
 ! V.P. Zhukov, V.A. Sechenov, A.Yu. Starikovskii, "Autoignition of 
-! a Lean Propane–Air Mixture at High Pressures", Kinetics and Catalysis,
+! a Lean Propaneï¿½Air Mixture at High Pressures", Kinetics and Catalysis,
 ! Vol. 46, No. 3, 2005, pp. 319-327.
 ! doi:10.1007/s10975-005-0079-7
 !
@@ -956,7 +956,7 @@ NC3H7COC2H4P          2   534.323     5.625     0.000     0.000     0.000    !FL
 NC3H7COC2H4S          2   534.323     5.625     0.000     0.000     0.000    !FLAMEMASTER
 NC3H7COC2H5           2   537.467     5.643     0.000     0.000     0.000    !FLAMEMASTER
 NC3H7COCH2            2   489.084     5.348     0.000     0.000     0.000    !FLAMEMASTER
-NC4H9COCH2            3   534.323     5.625     0.000     0.000     0.000    !FLAMEMASTER
+NC4H9COCH2            2   534.323     5.625     0.000     0.000     0.000    !FLAMEMASTER
 NC4H9COCH3            2   537.467     5.643     0.000     0.000     0.000    !FLAMEMASTER
 NEO-C5H10O            2   492.434     5.369     0.000     0.000     0.000    !FLAMEMASTER
 NEOC5H10OOH           2   546.691     5.698     0.000     0.000     0.000    !FLAMEMASTER

@@ -12,10 +12,16 @@ ANSYS CHEMKIN Pro (17.2, 20.2)
 - Aramco 1.3
 - Aramco 2.0
 - Aramco 3.0
+    - NOTE: 5544..5569 of MECH file were edited: Chemkin parses +M & PLOG with PLOG prev.
 - Zhukov C1-C7: [Zhukov, Kinetic model of alkane oxidation at high pressure from methane to n-heptane](https://www.researchgate.net/publication/225004510)
 - Zhukov C1-C4
 - RAMEC: [Peterson, Davidson, Hanson, Kinetics Modeling of Shock-Induced Ignition in Low-Dilution CH4/O2 Mixtures at High Pressures and Intermediate Temperatures](https://doi.org/10.1016/S0010-2180(98)00111-4)
 - Slavinskaya
 - NUIMech
 
-  
+## Препроцессинг
+временно - в ручном виде
+
+```bash
+ck2yaml --input MECH --thermo THERM --trans TRANS
+```

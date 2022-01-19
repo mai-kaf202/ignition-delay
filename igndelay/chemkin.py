@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 import numpy as np
 
-from .mechs import CKMech
+from .mechs import CKMech, OldCkMech
 from . import workdir
 from binascii import crc32
 
@@ -101,3 +101,24 @@ def ck_ign(df: pd.DataFrame) -> dict[str, float]:
     tT = (t[idT]+t[idT+1])/2
     oh = t[np.argmax(df['OH'])]
     return {'dT/dt': tT, 'OHmax': oh}
+
+def chemkin_conv(name: str, mech: OldCkMech, env: CKEnv = test_env, root: str = 'instance/mechs'):
+    fs = r"""IN_CHEM_INPUT=C:\code\work\ignition-delay\mechanisms\NUImech\NUIGMech1.1.MECH
+IN_SURF_INPUT=
+IN_THERM_DB=C:\code\work\ignition-delay\mechanisms\NUImech\NUIGMech1.1.THERM
+IN_TRANS_DB=C:\code\work\ignition-delay\mechanisms\NUImech\NUIGMech1.1.TRAN
+IN_LIQUID_DB=
+FIT_TRANSPORT_PROPERTIES=0
+OUT_CHEM_OUTPUT=C:\Users\emera\chemkin\test\nui_gas.out
+OUT_CHEM_ASC=C:\Users\emera\chemkin\test\nui_gas.asc
+OUT_CHEM_SPECIES=C:\Users\emera\chemkin\test\nui_gas.asu
+OUT_SURF_OUTPUT=
+OUT_SURF_ASC=
+OUT_SURF_SPECIES=
+OUT_TRAN_OUTPUT=C:\Users\emera\chemkin\test\nui_gtran.out
+OUT_TRAN_ASC=C:\Users\emera\chemkin\test\nui_gtran.asc
+OUT_XML_PARAMETERS=C:\Users\emera\chemkin\test\nui.xml
+OUT_COMPOSITION=C:\Users\emera\chemkin\test\nui.cklmnt
+OUT_REACTIONS=C:\Users\emera\chemkin\test\nui.cktab
+"""
+    pass

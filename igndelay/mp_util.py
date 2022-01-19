@@ -17,7 +17,7 @@ def worker(a: tuple[str, Any]):
     # ret = [sarr.t, sarr.T, sarr.P, sarr('CH4').X, sarr('CH4').Y, sarr('OH').X, sarr('OH').Y]
     return (*a, ignitionDelay(sarr))
 
-def ct_worker(args: tuple[str, str, float, float]):
+def ct_calc(args: tuple[str, str, float, float]) -> pd.DataFrame:
     ROOT = 'instance/ct'
     if not os.path.exists(ROOT):
         os.mkdir(ROOT)
@@ -37,6 +37,11 @@ def ct_worker(args: tuple[str, str, float, float]):
         df.to_pickle(fn)
     else:
         df = pd.read_pickle(fn)
+    return df
+
+def ct_worker(args: tuple[str, str, float, float]):
+    df = ct_calc(args)
+    [name, model, T, p] = args
     delay = df_ign_delay(df)
     return ((name, T, p), delay)
 

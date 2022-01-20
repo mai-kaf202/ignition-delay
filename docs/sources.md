@@ -18,10 +18,19 @@ ANSYS CHEMKIN Pro (17.2, 20.2)
 - RAMEC: [Peterson, Davidson, Hanson, Kinetics Modeling of Shock-Induced Ignition in Low-Dilution CH4/O2 Mixtures at High Pressures and Intermediate Temperatures](https://doi.org/10.1016/S0010-2180(98)00111-4)
 - Slavinskaya
 - NUIMech
+- CH4 Hashemi: [Hashemi, H., Christensen, J. M., Gersen, S., Levinsky, H., Klippenstein, S. J., & Glarborg, P. (2016). High-pressure oxidation of methane. Combustion and Flame, 172, 349-364.](https://orbit.dtu.dk/en/publications/high-pressure-oxidation-of-methane)
+- [CH4 Kazakov](http://combustion.berkeley.edu/drm/) (drm19, drm22)
+- [CH4 Smooke](https://link.springer.com/book/10.1007%2FBFb0035362)
+- [Natural gas CH4-C2H6](https://onlinelibrary.wiley.com/doi/10.1002/kin.20352) (kin_20352)
 
 ## Препроцессинг
-временно - в ручном виде
+для кантеры — автоматизирован;
 
-```bash
-ck2yaml --input MECH --thermo THERM --trans TRANS
-```
+для кемкина — WIP
+
+## См. также
+(на будущее)
+
+https://shepherd.caltech.edu/EDL/PublicResources/sdt/nb/sdt_intro.slides.html
+
+https://shepherd.caltech.edu/EDL/PublicResources/sdt/doc/QuickReferenceSDT.pdf
